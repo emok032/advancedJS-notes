@@ -2,9 +2,9 @@
 
 1. (mode) "use strict";
 ...AKA using variables in a 'strict' operating context
-	
+
 	Rules of "use strict":
-		- Cannot use any variable even if it has not been defined by "var = "
+		- Variable MUST be declared before it used (or else undefined)
 		- Will return errors where variable is undefined
 		- Prevents { 
 			accidental global variables (e.g. variable typos),
@@ -119,7 +119,48 @@ The Primitive & Object Types
 		}
 		console.log(exampleBlock); // returns exampleBlock! Not limited by block-level code
 
-7. What is varible hoisting?
+7. What is variable hoisting?
+
+variable & function() hoisting -VS- var-anonymous-function() hoisting
+(or a NAMED function hoisted at top of scope while a FUNCTION EXPRESSION, which is assigned to a var won't get hoisted)
+
+JS Engine executes a variable declaration basically on the implication that it is declared like so:
+
+// Before
+	"use strict";
+
+	console.log(exampleVar);
+	var exampleVar = 100;
+
+// After (implied by JS Engine)
+	"use strict";
+
+	var exampleVar;
+	console.log(exampleVar);
+	exampleVar = 100;
+
+...Even if it is called before it is declared like:
+
+A.	// Hoisted (Works)
+	exampleFunction(); // function call
+	function exampleFunction(){ // function declaration
+		// this is a named function
+	};
+
+B.	// Not Hoisted (Will not execute properly)
+	exampleFunction(); // function call
+	var exampleFunction = function() { // function declaration
+		// this is an ANONYMOUS function
+	};
+
+
+
+
+
+
+
+
+
 
 
 
