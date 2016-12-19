@@ -4,7 +4,7 @@
 ...AKA using variables in a 'strict' operating context
 
 	Rules of "use strict":
-		- Variable MUST be declared before it used (or else undefined)
+		- *Variable MUST be declared before it used (or else undefined)
 		- Will return errors where variable is undefined
 		- Prevents { 
 			accidental global variables (e.g. variable typos),
@@ -12,6 +12,15 @@
 		 	deletion of variables, functions, and arguments
 		  }
 		- eval() will be safer to use: Specifies eval arguments to within eval only - do not "leak out"
+		- what goes on in eval() stays in eval()
+
+			"use strict";
+
+			var name = 'igloo';
+			var code = "var name = 'asim';" // re-defining var name
+			eval(code) // "use strict" restricts the eval() to only eval
+
+			console.log(name)
 
 (1) Example:
 	"use strict";
@@ -126,17 +135,17 @@ variable & function() hoisting -VS- var-anonymous-function() hoisting
 
 JS Engine executes a variable declaration basically on the implication that it is declared like so:
 
-// Before
+// Before (same as below)...
 	"use strict";
 
 	console.log(exampleVar);
 	var exampleVar = 100;
 
-// After (implied by JS Engine)
+// ...After (implied by JS Engine)
 	"use strict";
 
-	var exampleVar;
-	console.log(exampleVar);
+	var exampleVar; // undefined
+	console.log(exampleVar); // undefined
 	exampleVar = 100;
 
 ...Even if it is called before it is declared like:
@@ -153,12 +162,117 @@ B.	// Not Hoisted (Will not execute properly)
 		// this is an ANONYMOUS function
 	};
 
+8. What is the scope chain? (How are variables resolved?)
 
+	*Scope Chain is defined LEXICALLY (in the order it is defined on the page/file)*
 
+9. What is an IIFE? (Immediately Invoked Function Expression)
 
+	// IIFE: Wrapping a ( function() ) and having it called immediately
+	( function(){	 } )();
 
+	**A general JS principles/convention:
+		* We don't want to have pseudo-global variables (unintended global variables)
+			- variables intended for a specific function's scope
+			- "leaks" out and pollutes the global scope
 
+10. What is a closure?
+	
+	Closures are inner functions inside of an outer function.
+	They have their own local scope and has access to outer function's scope,
+		parameters (but NOT arguments object),
+		and they also have access to global variable
 
+	function(){
+		// Closure {}
+	};
+
+	A. Closures can refer to OUTERSCOPE variables/functions 
+		*even if the outerscope function has exited (returned)
+		- 	closure points to curent value of whatever values are being used in the function body
+	Points to current value of the outerscope.
+	Use IFFE's (in a for loop, for example) to output the expected behavior.
+
+	// Consider the following code snippet:
+	// What gets logged to the console when the user clicks on “Button 4”?
+
+	for (var i = 0; i < 5; i++) {
+
+		var btn = document.createElement('button'); // btn: creates a button
+
+		btn.appendChild(document.createTextNode('Button ' + i)); // attach button creation to text node 'Button' + value of i
+
+		btn.addEventListener('click', function(){ console.log(i); }); // add click event listener where function executes a console.log to return value of i
+
+		document.body.appendChild(btn); // attach variable btn to the html body with all of it's 
+
+	}
+
+	// What will the following code output to the console?
+	// FYI: f(n) is a factorial
+
+	console.log(
+		(
+			function f(n){
+				return (
+					(n > 1) ? n * f(n-1) : n
+					// (4 > 1) ? true... 4 * f(3) ...* 6 = 24
+					// (3 > 1) ? true... 3 * f(2) ...* 2 = 6
+					// (2 > 1) ? true... 2 * f(1) ...* 1 = 2
+					// (1 > 1) ? false... 1
+				)
+			}
+		)(4)
+		// f(4) = 24
+		// 4! = 24
+	);
+
+	// console.log(24);
+	// 24
+
+	// Consider the code snippet below. What will the console output be?
+
+	(
+		function(x) { // x = 1
+
+			return (
+				function(y) { // y = 2
+
+					console.log(x); // x = 1
+
+				}
+			)(2)
+
+		}
+	)(1);
+
+	// 1
+	// JS Engine takes the value of x in the outerscope, which x = 1
+
+	function loo() {
+	  var goo = 1;
+	  moo();
+	}
+
+	function moo() {
+	  console.log(goo);
+	}
+
+	loo();
+	// Throw an ERROR where goo is 'not defined'
+	// BUT notice that it is not 'undefined' and is actually a REFERENCE ERROR
+
+	var salary = "1000$";
+
+	(function () {
+
+	console.log("Original salary was " + salary);
+
+	var salary = "5000$";
+
+	console.log("My New Salary " + salary);
+
+	})();
 
 
 
