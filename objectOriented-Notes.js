@@ -68,13 +68,15 @@
 	exampleObject.checkThis(); // the operating context has been specifcally defined (as exampleObject)
 	// Object { }
 
-// What do the functions call, bind, and apply do? =====================================================================
+// What are the other ways to stabilize the keyword 'this'?
+// 		AKA What do the functions call, bind, and apply do? =====================================================================
 
+// A. Why use .call()? *Remember, it's all about stabilizing the value of 'this'
 function exampFunc(param1, param2) {
 	console.log(this);
 };
 
-exampFunc.call(); // Why use .call()? *Remember, it's all about stabilizing the value of 'this'
+exampFunc.call(); 
 exampFunc(); // Instead of?
 
 // Because...
@@ -97,7 +99,7 @@ function a(b,c,d) {
 
 a.call(1,2,3,4); // very first parameter - 'this'
 
-// .apply()
+// B. Why use function .apply()
 
 "use strict";
 
@@ -125,6 +127,34 @@ a.apply(1, [2,3,4]); // very first parameter - 'this'
 	console.log(x);
 
 // FYI: variadic (function) - a function of indefinite arity (arguments)
+
+// C. When do we use .bind()?
+
+var a = function() {
+	console.log(this);
+}.bind(1); // assigns 'this' in the function that is .bind to it...
+// (or)
+a = a.bind(1); // (same as {...}.bind(1) Line 135 - is just minimizing the length of code)
+
+var asim = {
+	func: a // ...even if calling it here
+}
+
+asim.func(); // 1
+
+// .bind() only works with function expressions not function objects
+
+// Example: .bind() to stabilize the keyword 'this'
+var exampVar = {
+	checkThis: function() {
+		var checkOther = function() {
+			console.log(this); // bc of bind(this), it will console.log 'this' from exampVar
+		}.bind(this); // binding 'this' (here) with the outer object's 'this' (exampVar's)
+		checkOther();
+	}
+}
+
+exampVar.checkThis();
 
 
 
