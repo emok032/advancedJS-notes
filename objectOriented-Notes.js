@@ -70,9 +70,61 @@
 
 // What do the functions call, bind, and apply do? =====================================================================
 
+function exampFunc(param1, param2) {
+	console.log(this);
+};
 
+exampFunc.call(); // Why use .call()? *Remember, it's all about stabilizing the value of 'this'
+exampFunc(); // Instead of?
 
+// Because...
+function exampFunc(param1, param2) {
+	console.log(this);
+};
 
+exampFunc.call();
+
+// Also, it takes parameters: where the very first parameter (invisible) always refers to 'this'
+
+"use strict";
+
+function a(b,c,d) {
+	console.log(this);
+	console.log(b);
+	console.log(c);
+	console.log(d);
+}
+
+a.call(1,2,3,4); // very first parameter - 'this'
+
+// .apply()
+
+"use strict";
+
+function a(b,c,d) {
+	console.log(this);
+	console.log(b);
+	console.log(c);
+	console.log(d);
+}
+
+a.call(1,2,3,4); // very first parameter - 'this'
+
+a.apply(1, [2,3,4]); // very first parameter - 'this'
+
+// So, why use .apply() vs .call()?
+	// .apply() is great for object and array arugments
+	// Example: Assume there is a summation function called sum()
+
+	// .call()
+	var y = sum.call(null, 1, 2, 3, 4); // if passing var things, then .call() would pass one object
+	console.log(y);
+	// .apply()
+	var things = [1,2,3,4];
+	var x = sum.apply( null, things) // takes array object as varadic (variable number of) arguments including all of it's elements
+	console.log(x);
+
+// FYI: variadic (function) - a function of indefinite arity (arguments)
 
 
 
