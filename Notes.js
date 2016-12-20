@@ -80,7 +80,7 @@ The Primitive & Object Types
 		variable Types can be changed DYNAMICALLY when the application runs (at runtime)
 		- (+) Up and running very quickly
 		- (-) Can miss silent errors
-	Java (a static language): 
+	Java (contains a static system): 
 		variable Types are definited STATICALLY - set initially and permanently
 		- (+) Catch silent errors
 		- (-) Not as flexible to get to runtime
